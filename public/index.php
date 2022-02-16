@@ -3,7 +3,13 @@
 use Illuminate\Contracts\Http\Kernel;
 use Illuminate\Http\Request;
 
+define('SYSTEM_VERSION','20220216_1');
 define('LARAVEL_START', microtime(true));
+define('APP_PATH', __DIR__);
+//css 路径
+define('BACKEND_CSS_PATH', '/static/backend/css/');
+define('BACKEND_PLUGIN_PATH', '/static/backend/plugin/');
+define('BACKEND_IMG_PATH', '/backend/static/image/');
 
 /*
 |--------------------------------------------------------------------------

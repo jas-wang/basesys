@@ -36,7 +36,6 @@ class RouteServiceProvider extends ServiceProvider
     public function boot()
     {
         $this->configureRateLimiting();
-
         $this->routes(function () {
             Route::prefix('api')
                 ->middleware('api')
@@ -46,6 +45,10 @@ class RouteServiceProvider extends ServiceProvider
             Route::middleware('web')
                 ->namespace($this->namespace)
                 ->group(base_path('routes/web.php'));
+            //添加后台路由
+            Route::prefix('backend')
+                ->namespace($this->namespace.'\Backend')
+                ->group(base_path('routes/backend.php'));
         });
     }
 

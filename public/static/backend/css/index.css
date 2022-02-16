@@ -1,0 +1,8 @@
+.title{
+    color: white;
+    position: absolute;
+    top: 18px;
+    left: 30px;
+    font-size: 22px;
+}
+.layui-nav-child{}
