@@ -7,30 +7,28 @@
     <link rel="stylesheet" href="<?=BACKEND_CSS_PATH?>global.css?v=<?=SYSTEM_VERSION?>" media="all">
     <link rel="stylesheet" href="<?=BACKEND_CSS_PATH?>index.css?v=<?=SYSTEM_VERSION?>" media="all">
     <script src="<?=BACKEND_PLUGIN_PATH?>layui/js/layui.js?v=<?=SYSTEM_VERSION?>"></script>
+    <script src="<?=BACKEND_PLUGIN_PATH?>vue/vue.global.js?v=<?=SYSTEM_VERSION?>"></script>
 </head>
 <body>
-<div class="content">
+<div class="container" id="container">
     <div class="layui-layout layui-layout-admin">
         <div class="layui-header header">
             <div class="layui-fluid">
                 <a class="title">
-                    基础管理系统
+                    {{systemTitle}}
                 </a>
                 <div class="layui-form layui-hide-xs component" lay-filter="LAY-site-header-component"></div>
                 <div class="layui-hide-xs site-notice"></div>
                 <ul class="layui-nav">
                     <li class="layui-nav-item">
-                        <a href="">控制台<span class="layui-badge">9</span></a>
-                    </li>
-                    <li class="layui-nav-item">
                         <a href="">个人中心<span class="layui-badge-dot"></span></a>
                     </li>
                     <li class="layui-nav-item">
-                        <a href=""><img src="//t.cn/RCzsdCq" class="layui-nav-img">我</a>
+                        <a href=""><img src="//t.cn/RCzsdCq" class="layui-nav-img">jas</a>
                         <dl class="layui-nav-child">
                             <dd><a href="javascript:;">修改信息</a></dd>
-                            <dd><a href="javascript:;">安全管理</a></dd>
-                            <dd><a href="javascript:;">退了</a></dd>
+                            <dd><a href="javascript:;">关于系统</a></dd>
+                            <dd><a href="javascript:;">退出</a></dd>
                         </dl>
                     </li>
                 </ul>
@@ -39,8 +37,7 @@
         <!--侧边栏-->
         <div class="layui-side layui-bg-black">
             <div class="layui-side-scroll">
-                <ul class="layui-nav layui-nav-tree " lay-filter="test">
-                    <!-- 侧边导航: <ul class="layui-nav layui-nav-tree layui-nav-side"> -->
+                <ul class="layui-nav layui-nav-tree ">
                     <li class="layui-nav-item layui-nav-itemed">
                         <a href="javascript:;">默认展开</a>
                         <dl class="layui-nav-child">
@@ -57,48 +54,134 @@
                             <dd><a href="">电商平台</a></dd>
                         </dl>
                     </li>
-                    <li class="layui-nav-item"><a href="">产品</a></li>
-                    <li class="layui-nav-item"><a href="">大数据</a></li>
                 </ul>
             </div>
         </div>
         <!--内容区域-->
-        <div class="rightContent">
-            <div class="layui-tab layui-tab-brief">
-                <div class="layui-body layui-tab-content site-demo site-demo-body">
-                    <div class="layui-tab-item layui-show">
-                        <div class="layui-main">
-                            <div id="LAY_preview">
+        <div class="layui-body" id="content">
 
-                                <div class="layui-tab layui-tab-card" lay-allowclose="true">
-                                    <ul class="layui-tab-title">
-                                        <li class="layui-this">网站设置<i class="layui-icon layui-icon-close layui-unselect layui-tab-close"></i></li>
-                                        <li>用户基本管理<i class="layui-icon layui-icon-close layui-unselect layui-tab-close"></i></li>
-                                        <li>权限分配<i class="layui-icon layui-icon-close layui-unselect layui-tab-close"></i></li>
-                                        <li>商品管理<i class="layui-icon layui-icon-close layui-unselect layui-tab-close"></i></li>
-                                        <li>订单管理<i class="layui-icon layui-icon-close layui-unselect layui-tab-close"></i></li>
-                                    </ul>
-                                    <div class="layui-tab-content" style="height: 150px;">
-                                        <div class="layui-tab-item layui-show">
-                                            1. 我个人比较喜欢卡片风格的，所以你发现又是以卡片的风格举例
-                                            2. 删除功能适用于所有风格
-                                        </div>
-                                        <div class="layui-tab-item">2</div>
-                                        <div class="layui-tab-item">3</div>
-                                        <div class="layui-tab-item">4</div>
-                                        <div class="layui-tab-item">5</div>
-                                        <div class="layui-tab-item">6</div>
-                                    </div>
-                                </div>
-                            </div>
-
-                        </div>
-                    </div>
-                </div>
-            </div>
         </div>
 
     </div>
 </div>
+<script>
+    const main = {
+        data() {
+            return {
+                systemTitle:'Base System',
+                websock: null, //建立的连接
+                lockReconnect: false, //是否真正建立连接
+                timeout: 20 * 1000, //20秒一次心跳
+                timeoutObj: null, //心跳心跳倒计时
+                serverTimeoutObj: null, //心跳倒计时
+                timeoutnum: null //断开 重连倒计时
+            }
+        },
+        created() {
+            this.initWebSocket();
+            console.log('组件钩子被调用')
+        },
+        destroyed() {
+            //页面销毁时关闭长连接
+            this.websocketclose();
+        },
+        methods: {
+            initWebSocket() {
+                //建立连接
+                //初始化weosocket
+                const wsuri = "ws://localhost:9998/echo";
+                //建立连接
+                this.websock = new WebSocket(wsuri);
+                //连接成功
+                this.websock.onopen = this.websocketonopen;
+                //连接错误
+                this.websock.onerror = this.websocketonerror;
+                //接收信息
+                this.websock.onmessage = this.websocketonmessage;
+                //连接关闭
+                this.websock.onclose = this.websocketclose;
+            },
+            reconnect() {
+                //重新连接
+                var that = this;
+                if (that.lockReconnect) {
+                    return;
+                }
+                that.lockReconnect = true;
+                //没连接上会一直重连，设置延迟避免请求过多
+                that.timeoutnum && clearTimeout(that.timeoutnum);
+                that.timeoutnum = setTimeout(function() {
+                    //新连接
+                    that.initWebSocket();
+                    that.lockReconnect = false;
+                }, 5000);
+            },
+            reset() {
+                //重置心跳
+                var that = this;
+                //清除时间
+                clearTimeout(that.timeoutObj);
+                clearTimeout(that.serverTimeoutObj);
+                //重启心跳
+                that.start();
+            },
+            start() {
+                //开启心跳
+                var self = this;
+                self.timeoutObj && clearTimeout(self.timeoutObj);
+                self.serverTimeoutObj && clearTimeout(self.serverTimeoutObj);
+                self.timeoutObj = setTimeout(function() {
+                    //这里发送一个心跳，后端收到后，返回一个心跳消息
+                    if (self.websock.readyState == 1) {
+                        //如果连接正常
+                        self.websock.send("heartbeat");
+                    } else {
+                        //否则重连
+                        self.reconnect();
+                    }
+                    self.serverTimeoutObj = setTimeout(function() {
+                        //超时关闭
+                        self.websock.close();
+                    }, self.timeout);
+                }, self.timeout);
+            },
+            websocketonopen() {
+                //连接成功事件
+                this.websocketsend('发送数据');
+                //提示成功
+                console.log("连接成功", 3);
+                //开启心跳
+                this.start();
+            },
+            websocketonerror(e) {
+                //连接失败事件
+                //错误
+                console.log("WebSocket连接发生错误");
+                //重连
+                this.reconnect();
+            },
+            websocketclose(e) {
+                //连接关闭事件
+                //提示关闭
+                console.log("连接已关闭");
+                //重连
+                this.reconnect();
+            },
+            websocketonmessage(event) {
+                //接收服务器推送的信息
+                //打印收到服务器的内容
+                console.log("收到服务器信息",event.data);
+                let data=event.data
+                //收到服务器信息，心跳重置
+                this.reset();
+            },
+            websocketsend(msg) {
+                //向服务器发送信息
+                this.websock.send(msg);
+            }
+    }
+    };
+    const app = Vue.createApp(main).mount('#container')
+</script>
 </body>
 </html>
