@@ -4,6 +4,7 @@ use Illuminate\Contracts\Http\Kernel;
 use Illuminate\Http\Request;
 
 define('SYSTEM_VERSION','20220216_1');
+define('SYSTEM_TITLE','Base System');
 define('LARAVEL_START', microtime(true));
 define('APP_PATH', __DIR__);
 //css 路径
