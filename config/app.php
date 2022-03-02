@@ -29,7 +29,7 @@ return [
     'env' => env('APP_ENV', 'production'),
 
 
-    'viewPath' => APP_PATH.'/../web/backend/html',
+
 
     /*
     |--------------------------------------------------------------------------
