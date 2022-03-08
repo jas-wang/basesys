@@ -2,7 +2,7 @@
 
 namespace App\Services\Auth;
 
-use App\Models\User;
+use App\Models\Auth\User;
 use App\Services\BaseService;
 
 /**
@@ -18,6 +18,12 @@ class UserService extends BaseService
     public function getByUsername(string $username)
     {
         return User::query()->where('username', $username)->first();
+    }
+
+
+    public function getUserRoleById($userId){
+
+        return User::query()->where('id', $userId)->first();
     }
 
 }

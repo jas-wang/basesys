@@ -6,7 +6,9 @@ namespace App\Http\Controllers\Backend;
 use App\Http\Controllers\Controller;
 use App\Lang\CommonLang;
 use http\Client\Response;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Collection;
 
 class BackendController extends Controller
 {
@@ -18,9 +20,53 @@ class BackendController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth:backend', ['except' => ['login']]);
+        $this->middleware('auth:backend', ['except' => ['login','logout']]);
     }
 
+    /**
+     * @param  LengthAwarePaginator|array  $page
+     * @param  null|array  $list
+     * @return array
+     */
+    protected function paginate($page, $list = null)
+    {
+        if ($page instanceof LengthAwarePaginator) {
+            $total = $page->total();
+            return [
+                'total' => $page->total(),
+                'page' => $total == 0 ? 0 : $page->currentPage(),
+                'limit' => $page->perPage(),
+                'pages' => $total == 0 ? 0 : $page->lastPage(),
+                'rows' => $list ?? $page->items()
+            ];
+        }
+
+        if ($page instanceof Collection) {
+            $page = $page->toArray();
+        }
+        if (!is_array($page)) {
+            return $page;
+        }
+
+        $total = count($page);
+        return [
+            'total' => $total,
+            'page' => $total == 0 ? 0 : 1,
+            'limit' => $total,
+            'pages' => $total == 0 ? 0 : 1,
+            'rows' => $page
+        ];
+    }
+    /**
+     * 分页信息
+     * @param $page
+     * @param  null  $list
+     * @return JsonResponse
+     */
+    protected function successPaginate($page, $list = null)
+    {
+        return $this->success($this->paginate($page, $list));
+    }
     /**
      * 成功
      * @param $data

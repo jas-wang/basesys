@@ -12,10 +12,22 @@ use Illuminate\Support\Facades\Route;
 | contains the "web" middleware group. Now create something great!
 |
 */
-
+/*用户角色*/
+Route::get('/auth/roles',[\App\Http\Controllers\Backend\AuthController::class, 'roles']);
+Route::get('/auth/routes',[\App\Http\Controllers\Backend\AuthController::class, 'routes']);
+Route::get('/schedule/index',[\App\Http\Controllers\Backend\MainController::class, 'index']);
 Route::get('/auth/register',[\App\Http\Controllers\Backend\AuthController::class, 'register']);
 Route::any('/auth/login',[\App\Http\Controllers\Backend\AuthController::class, 'login']);
+Route::post('/auth/logout',[\App\Http\Controllers\Backend\AuthController::class, 'logout']);
 Route::get('/auth/userinfo',[\App\Http\Controllers\Backend\AuthController::class, 'userinfo']);
+/*订单*/
+Route::get('/order/list',[\App\Http\Controllers\Backend\OrderController::class, 'list']);
+Route::post('/order/getPageList',[\App\Http\Controllers\Backend\OrderController::class, 'getPageList']);
+Route::post('/order/updateOrderStatus',[\App\Http\Controllers\Backend\OrderController::class, 'updateOrderStatus']);
+Route::post('/order/getShipInfo',[\App\Http\Controllers\Backend\OrderController::class, 'getShipInfo']);
+/*首页*/
+Route::get('/main/count',[\App\Http\Controllers\Backend\MainController::class, 'count']);
+
 /*
 Route::group([
 

@@ -19,18 +19,6 @@ const tableRouter = {
       meta: { title: '动态表单' }
     },
     {
-      path: 'drag-table',
-      component: () => import('@/views/table/drag-table'),
-      name: 'DragTable',
-      meta: { title: '可拖拽table' }
-    },
-    {
-      path: 'inline-edit-table',
-      component: () => import('@/views/table/inline-edit-table'),
-      name: 'InlineEditTable',
-      meta: { title: '可编辑table' }
-    },
-    {
       path: 'complex-table',
       component: () => import('@/views/table/complex-table'),
       name: 'ComplexTable',

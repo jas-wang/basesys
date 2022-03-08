@@ -1,5 +1,5 @@
 module.exports = {
-  title: 'BaseSystem',
+  title: '订单管理系统',
 
   /**
    * @type {boolean} true | false

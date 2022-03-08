@@ -3,15 +3,24 @@
 
 namespace App\Http\Controllers\Backend;
 
-use App\CodeResponse;
 use App\Lang\Auth\UserLang;
 use App\Lang\CommonLang;
 use App\Services\Auth\UserService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Data\Source;
 
 class AuthController extends BackendController
 {
+
+    public function routes(){
+
+        return $this->success(Source::ROUTES);
+    }
+    public function roles(){
+
+        return $this->success(Source::ROLES);
+    }
     public function register()
     {
         return 1;
@@ -66,7 +75,10 @@ class AuthController extends BackendController
      */
     public function userinfo()
     {
-        return $this->success(auth()->user());
+        $userInfo = auth()->user();
+        //$userInfo['roles'] = RoleService::getInstance()->getRoleByUserId($userInfo->getAuthIdentifier());
+        $userInfo['roles'] = ['admin'];
+        return $this->success( $userInfo);
     }
 
     /**
@@ -78,7 +90,7 @@ class AuthController extends BackendController
     {
         auth()->logout();
 
-        return response()->json(['message' => 'Successfully logged out']);
+        return $this->success();
     }
 
     /**

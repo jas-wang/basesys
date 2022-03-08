@@ -1,54 +1,15 @@
 <template>
   <el-row :gutter="40" class="panel-group">
-    <el-col :xs="12" :sm="12" :lg="6" class="card-panel-col">
-      <div class="card-panel" @click="handleSetLineChartData('newVisitis')">
+    <el-col v-for="(item,index) in schedule" :key="index" :xs="12" :sm="12" :lg="6" class="card-panel-col">
+      <div class="card-panel" @click="handleSetLineChartData(index)">
         <div class="card-panel-icon-wrapper icon-people">
-          <svg-icon icon-class="peoples" class-name="card-panel-icon" />
+          <svg-icon :icon-class=item.icon class-name="card-panel-icon" />
         </div>
         <div class="card-panel-description">
           <div class="card-panel-text">
-            New Visits
+            {{ item.name }}
           </div>
-          <count-to :start-val="0" :end-val="102400" :duration="2600" class="card-panel-num" />
-        </div>
-      </div>
-    </el-col>
-    <el-col :xs="12" :sm="12" :lg="6" class="card-panel-col">
-      <div class="card-panel" @click="handleSetLineChartData('messages')">
-        <div class="card-panel-icon-wrapper icon-message">
-          <svg-icon icon-class="message" class-name="card-panel-icon" />
-        </div>
-        <div class="card-panel-description">
-          <div class="card-panel-text">
-            Messages
-          </div>
-          <count-to :start-val="0" :end-val="81212" :duration="3000" class="card-panel-num" />
-        </div>
-      </div>
-    </el-col>
-    <el-col :xs="12" :sm="12" :lg="6" class="card-panel-col">
-      <div class="card-panel" @click="handleSetLineChartData('purchases')">
-        <div class="card-panel-icon-wrapper icon-money">
-          <svg-icon icon-class="money" class-name="card-panel-icon" />
-        </div>
-        <div class="card-panel-description">
-          <div class="card-panel-text">
-            Purchases
-          </div>
-          <count-to :start-val="0" :end-val="9280" :duration="3200" class="card-panel-num" />
-        </div>
-      </div>
-    </el-col>
-    <el-col :xs="12" :sm="12" :lg="6" class="card-panel-col">
-      <div class="card-panel" @click="handleSetLineChartData('shoppings')">
-        <div class="card-panel-icon-wrapper icon-shopping">
-          <svg-icon icon-class="shopping" class-name="card-panel-icon" />
-        </div>
-        <div class="card-panel-description">
-          <div class="card-panel-text">
-            Shoppings
-          </div>
-          <count-to :start-val="0" :end-val="13600" :duration="3600" class="card-panel-num" />
+          <count-to :start-val="0" :end-val=item.total :duration="2600" class="card-panel-num" />
         </div>
       </div>
     </el-col>
@@ -57,14 +18,68 @@
 
 <script>
 import CountTo from 'vue-count-to'
+import { getPageCount } from '@/api/main'
 
 export default {
   components: {
     CountTo
   },
+  data() {
+    return {
+      schedule: {
+        newUser:{
+          name:'新用户',
+          total:10,
+          icon:'peoples',
+          chartData:{
+            expectedData: [100, 120, 161, 134, 105, 160, 165],
+            actualData: [120, 82, 91, 154, 162, 140, 145]
+          }
+        },
+        order:{
+          name:'订单',
+          total:10,
+          icon:'list',
+          chartData:{
+            expectedData: [100, 120, 161, 134, 105, 160, 165],
+            actualData: [120, 82, 91, 154, 162, 140, 145]
+          }
+        },
+        money:{
+          name:'金额',
+          total:10,
+          icon:'money',
+          chartData:{
+            expectedData: [100, 120, 161, 134, 105, 160, 165],
+            actualData: [120, 82, 91, 154, 162, 140, 145]
+          }
+        },
+        todo:{
+          name:'待办',
+          total:10,
+          icon:'clipboard',
+          chartData:{
+            expectedData: [1100, 1210, 1611, 134, 105, 160, 165],
+            actualData: [120, 82, 91, 154, 162, 140, 145]
+          }
+        },
+      }
+    }
+  },
+  created() {
+    this.getCount()
+    this.handleSetLineChartData('todo')
+  },
   methods: {
+    /*获取首页统计信息*/
+    getCount() {
+      let objThis = this;
+      getPageCount().then(function (data){
+      //  objThis.schedule = data['data'];
+      });
+    },
     handleSetLineChartData(type) {
-      this.$emit('handleSetLineChartData', type)
+      this.$emit('handleSetLineChartData', this.schedule[type].chartData)
     }
   }
 }
