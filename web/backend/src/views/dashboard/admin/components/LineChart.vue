@@ -28,8 +28,12 @@ export default {
     },
     chartData: {
       type: Object,
-      required: true
-    }
+      default: true
+    },
+    title: {
+      type: String,
+      default: '新用户'
+    },
   },
   data() {
     return {
@@ -61,7 +65,10 @@ export default {
       this.chart = echarts.init(this.$el, 'macarons')
       this.setOptions(this.chartData)
     },
-    setOptions({ expectedData, actualData } = {}) {
+    setOptions({ actualData } = {}) {
+      if(this.chart === null) {
+        return
+      }
       this.chart.setOption({
         xAxis: {
           data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
@@ -90,11 +97,11 @@ export default {
           }
         },
         legend: {
-          data: ['expected', 'actual']
+          data: [this.title]
         },
         series: [
         {
-          name: 'actual',
+          name: this.title,
           smooth: true,
           type: 'line',
           itemStyle: {

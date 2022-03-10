@@ -22,3 +22,18 @@ export function logout() {
     method: 'post'
   })
 }
+
+export function modifyPass(data) {
+  return request({
+    url: '/backend/auth/reset',
+    method: 'post',
+    data
+  })
+}
+export function getCode(data) {
+  return request({
+    url: '/backend/auth/getCode',
+    method: 'post',
+    data
+  })
+}

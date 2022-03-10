@@ -6,16 +6,10 @@ Vue.use(Router)
 /* Layout */
 import Layout from '@/layout'
 
-/* Router Modules */
-import componentsRouter from './modules/components'
-import chartsRouter from './modules/charts'
-import tableRouter from './modules/table'
-import nestedRouter from './modules/nested'
 
 /**
  * 路由
  */
-
 /**
  * constantRoutes
  * a base page that does not have permission requirements
@@ -76,8 +70,8 @@ export const constantRoutes = [
       {
         path: 'index',
         component: () => import('@/views/profile/index'),
-        name: '个人信息',
-        meta: { title: 'Profile', icon: 'user', noCache: true }
+        name: 'profile',
+        meta: { title: '个人信息', icon: 'user', noCache: true }
       }
     ]
   }
@@ -103,14 +97,8 @@ export const asyncRoutes = [
         path: 'orderTodo',
         component: () => import('@/views/order/orderTodo'),
         name: 'orderTodo',
-        meta: {  roles: ['editor'],title: '待处理',icon: 'edit' }
+        meta: {  roles: ['editor'],title: '订单管理',icon: 'edit' }
       },
-      {
-        path: 'orderDone',
-        component: () => import('@/views/table/complex-table'),
-        name: 'orderDone',
-        meta: {  roles: ['admin'],title: '已处理',icon: 'edit' }
-      }
     ]
   },
 

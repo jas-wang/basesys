@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 
 class OrderController extends BackendController
 {
+    protected $only = ['getPageList'];
     /**
      * @param Request $request
      * @return array|\Illuminate\Http\JsonResponse

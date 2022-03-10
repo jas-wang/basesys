@@ -19,6 +19,10 @@
           <router-link to="/profile/index">
             <el-dropdown-item>个人信息</el-dropdown-item>
           </router-link>
+
+          <el-dropdown-item divided @click.native="modifyPassword">
+            <span style="display:block;">修改密码</span>
+          </el-dropdown-item>
           <router-link to="/">
             <el-dropdown-item>首页</el-dropdown-item>
           </router-link>
@@ -28,6 +32,12 @@
         </el-dropdown-menu>
       </el-dropdown>
     </div>
+
+    <!-- 修改密码-->
+    <el-dialog :visible.sync="modifyPasswordDialog" :modal="false" :width="modifyPasswordDialogWidth" :close-on-click-modal="false" :closeOnPressEscape="false" title="修改密码">
+      <modify-pass :user="user" />
+    </el-dialog>
+
   </div>
 </template>
 
@@ -39,7 +49,7 @@ import ErrorLog from '@/components/ErrorLog'
 import Screenfull from '@/components/Screenfull'
 import SizeSelect from '@/components/SizeSelect'
 import Search from '@/components/HeaderSearch'
-
+import ModifyPass from '@/views/profile/components/ModifyPass'
 export default {
   components: {
     Breadcrumb,
@@ -47,7 +57,8 @@ export default {
     ErrorLog,
     Screenfull,
     SizeSelect,
-    Search
+    Search,
+    ModifyPass
   },
   computed: {
     ...mapGetters([
@@ -56,9 +67,24 @@ export default {
       'device'
     ])
   },
+  data() {
+    return {
+      modifyPasswordDialog: false,
+      modifyPasswordDialogWidth:'500px',
+      user:{
+      }
+
+    }
+  },
+  created() {
+    this.user.name = this.$store.getters.nickname
+  },
   methods: {
     toggleSideBar() {
       this.$store.dispatch('app/toggleSideBar')
+    },
+    modifyPassword() {
+     this.modifyPasswordDialog = !this.modifyPasswordDialog
     },
     async logout() {
       await this.$store.dispatch('user/logout')

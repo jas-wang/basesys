@@ -19,7 +19,9 @@ Route::get('/schedule/index',[\App\Http\Controllers\Backend\MainController::clas
 Route::get('/auth/register',[\App\Http\Controllers\Backend\AuthController::class, 'register']);
 Route::any('/auth/login',[\App\Http\Controllers\Backend\AuthController::class, 'login']);
 Route::post('/auth/logout',[\App\Http\Controllers\Backend\AuthController::class, 'logout']);
+Route::post('/auth/getCode',[\App\Http\Controllers\Backend\AuthController::class, 'getCode']);
 Route::get('/auth/userinfo',[\App\Http\Controllers\Backend\AuthController::class, 'userinfo']);
+Route::post('/auth/reset',[\App\Http\Controllers\Backend\AuthController::class, 'reset']);
 /*订单*/
 Route::get('/order/list',[\App\Http\Controllers\Backend\OrderController::class, 'list']);
 Route::post('/order/getPageList',[\App\Http\Controllers\Backend\OrderController::class, 'getPageList']);

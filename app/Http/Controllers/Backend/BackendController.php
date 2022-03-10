@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Backend;
 
 use App\Http\Controllers\Controller;
 use App\Lang\CommonLang;
-use http\Client\Response;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Collection;
@@ -13,6 +12,8 @@ use Illuminate\Support\Collection;
 class BackendController extends Controller
 {
 
+    protected $except = ['login','logout'];
+    protected $auth = [];
     /**
      * Create a new AuthController instance.
      *
@@ -20,7 +21,14 @@ class BackendController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth:backend', ['except' => ['login','logout']]);
+        $option = [];
+        if (!is_null($this->auth)) {
+            $option['only'] = $this->auth;
+        }
+        if (!is_null($this->except)) {
+            $option['except'] = $this->except;
+        }
+        $this->middleware('auth:backend', $option);
     }
 
     /**
@@ -95,7 +103,7 @@ class BackendController extends Controller
      * @param $info 信息
      * @return array
      */
-    protected function outPut(array $response, $data = null, $info = '')
+    protected function outPut(array $response, $data = null, $info = ''): array
     {
         list($errno, $errmsg) = $response;
         $ret = ['code' => $errno, 'message' => $info ?: $errmsg];

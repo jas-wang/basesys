@@ -1,4 +1,4 @@
-import { login, logout, getInfo } from '@/api/user'
+import {login, logout, getInfo, modifyPass, getCode} from '@/api/user'
 import { getToken, setToken, removeToken } from '@/utils/auth'
 import router, { resetRouter } from '@/router'
 
@@ -25,9 +25,17 @@ const mutations = {
   },
   SET_ROLES: (state, roles) => {
     state.roles = roles
+  },
+  SET_EMAIL: (state, email) => {
+    state.email = email
+  },
+  SET_NICKNAME: (state, nickname) => {
+    state.nickname = nickname
+  },
+  SET_CODE: (state, code) => {
+    state.code = code
   }
 }
-
 const actions = {
   // user login
   login({ commit }, userInfo) {
@@ -38,6 +46,32 @@ const actions = {
         commit('SET_TOKEN', data.token)
         setToken(data.token)
         resolve()
+      }).catch(error => {
+        reject(error)
+      })
+    })
+  },
+  // user login
+  modifyPass({ commit }, userInfo) {
+    const { username, password,code,phone } = userInfo
+    return new Promise((resolve, reject) => {
+      modifyPass({ username: username.trim(), password: password,code:code,phone:phone }).then(response => {
+        commit('SET_TOKEN', '')
+        commit('SET_ROLES', [])
+        removeToken()
+        resetRouter()
+        resolve(response)
+      }).catch(error => {
+        reject(error)
+      })
+    })
+  },
+
+  getCode({ commit }, param) {
+    const { phone } = param
+    return new Promise((resolve, reject) => {
+      getCode({ phone: phone }).then(response => {
+        resolve(response)
       }).catch(error => {
         reject(error)
       })
@@ -54,7 +88,7 @@ const actions = {
           reject('Verification failed, please Login again.')
         }
 
-        const { roles, name, avatar, introduction } = data
+        const { roles, name, avatar, introduction ,email,nickname } = data
 
         // roles must be a non-empty array
         if (!roles || roles.length <= 0) {
@@ -64,7 +98,9 @@ const actions = {
         commit('SET_ROLES', roles)
         commit('SET_NAME', name)
         commit('SET_AVATAR', avatar)
-        commit('SET_INTRODUCTION', 'asdasdasdasd')
+        commit('SET_INTRODUCTION', '这个家伙很懒什么也没留下')
+        commit('SET_EMAIL', email)
+        commit('SET_NICKNAME', nickname)
         resolve(data)
       }).catch(error => {
         reject(error)

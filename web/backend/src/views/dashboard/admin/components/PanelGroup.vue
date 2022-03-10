@@ -33,7 +33,7 @@ export default {
           icon:'peoples',
           chartData:{
             expectedData: [100, 120, 161, 134, 105, 160, 165],
-            actualData: [120, 82, 91, 154, 162, 140, 145]
+            actualData: [1, 82, 91, 154, 162, 140, 145]
           }
         },
         order:{
@@ -42,7 +42,7 @@ export default {
           icon:'list',
           chartData:{
             expectedData: [100, 120, 161, 134, 105, 160, 165],
-            actualData: [120, 82, 91, 154, 162, 140, 145]
+            actualData: [2, 82, 91, 154, 162, 140, 145]
           }
         },
         money:{
@@ -51,7 +51,7 @@ export default {
           icon:'money',
           chartData:{
             expectedData: [100, 120, 161, 134, 105, 160, 165],
-            actualData: [120, 82, 91, 154, 162, 140, 145]
+            actualData: [120, 82, 3, 154, 162, 140, 145]
           }
         },
         todo:{
@@ -60,7 +60,7 @@ export default {
           icon:'clipboard',
           chartData:{
             expectedData: [1100, 1210, 1611, 134, 105, 160, 165],
-            actualData: [120, 82, 91, 154, 162, 140, 145]
+            actualData: [120, 82, 5, 154, 162, 140, 145]
           }
         },
       }
@@ -79,7 +79,7 @@ export default {
       });
     },
     handleSetLineChartData(type) {
-      this.$emit('handleSetLineChartData', this.schedule[type].chartData)
+      this.$emit('handleSetLineChartData', this.schedule[type])
     }
   }
 }

@@ -5,25 +5,7 @@
     <panel-group @handleSetLineChartData="handleSetLineChartData" />
 
     <el-row style="background:#fff;padding:16px 16px 0;margin-bottom:32px;">
-      <line-chart :chart-data="lineChartData" />
-    </el-row>
-
-    <el-row :gutter="32">
-      <el-col :xs="24" :sm="24" :lg="8">
-        <div class="chart-wrapper">
-          <raddar-chart />
-        </div>
-      </el-col>
-      <el-col :xs="24" :sm="24" :lg="8">
-        <div class="chart-wrapper">
-          <pie-chart />
-        </div>
-      </el-col>
-      <el-col :xs="24" :sm="24" :lg="8">
-        <div class="chart-wrapper">
-          <bar-chart />
-        </div>
-      </el-col>
+      <line-chart :chart-data="lineChartData" :title="lineChartTitle" />
     </el-row>
 
   </div>
@@ -33,12 +15,7 @@
 import GithubCorner from '@/components/GithubCorner'
 import PanelGroup from './components/PanelGroup'
 import LineChart from './components/LineChart'
-import RaddarChart from './components/RaddarChart'
-import PieChart from './components/PieChart'
-import BarChart from './components/BarChart'
 
-import TodoList from './components/TodoList'
-import BoxCard from './components/BoxCard'
 
 
 export default {
@@ -46,21 +23,18 @@ export default {
   components: {
     GithubCorner,
     PanelGroup,
-    LineChart,
-    RaddarChart,
-    PieChart,
-    BarChart,
-    TodoList,
-    BoxCard
+    LineChart
   },
   data() {
     return {
-      lineChartData: null
+      lineChartData: null,
+      lineChartTitle:null
     }
   },
   methods: {
     handleSetLineChartData(lineChartData) {
-      this.lineChartData = lineChartData
+      this.lineChartData = lineChartData.chartData
+      this.lineChartTitle = lineChartData.name
     }
   }
 }
