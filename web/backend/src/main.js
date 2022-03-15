@@ -20,7 +20,7 @@ import './permission' // permission control
 import './utils/error-log' // error log
 
 import * as filters from './filters'
-import zhLang from "element-ui/lib/locale/lang/en"; // global filters
+import zhLang from 'element-ui/lib/locale/lang/en' // global filters
 import TreeTable from 'vue-table-with-tree-grid'
 Vue.component('tree-table', TreeTable)
 /**

@@ -16,8 +16,6 @@ import GithubCorner from '@/components/GithubCorner'
 import PanelGroup from './components/PanelGroup'
 import LineChart from './components/LineChart'
 
-
-
 export default {
   name: 'DashboardAdmin',
   components: {
@@ -28,7 +26,7 @@ export default {
   data() {
     return {
       lineChartData: null,
-      lineChartTitle:null
+      lineChartTitle: null
     }
   },
   methods: {

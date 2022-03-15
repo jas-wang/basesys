@@ -45,7 +45,7 @@
         </el-form-item>
       </el-tooltip>
 
-      <el-button :loading="loading" type="primary" style="width:100%;margin-bottom:30px;" @click.native.prevent="handleLogin">Login</el-button>
+      <el-button :loading="loading" type="primary" style="width:100%;margin-bottom:30px;" @click.native.prevent="handleLogin">登         录</el-button>
 
       <div style="position:relative">
         <div class="tips">
@@ -54,7 +54,7 @@
         </div>
 
         <el-button class="thirdparty-button" type="primary" @click="showDialog=true">
-         第三方登录
+          第三方登录
         </el-button>
       </div>
     </el-form>
@@ -161,7 +161,6 @@ export default {
               this.loading = false
             })
         } else {
-
           return false
         }
       })
@@ -173,8 +172,8 @@ export default {
         }
         return acc
       }, {})
-    },
-   /* afterQRScan() {
+    }
+    /* afterQRScan() {
       if (e.key === 'x-admin-oauth-code') {
         const code = getQueryObject(e.newValue)
         const codeMap = {

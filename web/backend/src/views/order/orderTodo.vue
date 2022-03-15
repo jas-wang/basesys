@@ -2,19 +2,36 @@
   <div class="app-container">
     <!--  搜索  -->
     <div class="filter-container">
-      <el-input v-model="listQuery.orderNo" placeholder="订单编号" style="width: 200px;" class="filter-item"
-                @keyup.enter.native="handleFilter"/>
+      <el-input
+        v-model="listQuery.orderNo"
+        placeholder="订单编号"
+        style="width: 200px;"
+        class="filter-item"
+        @keyup.enter.native="handleFilter"
+      />
 
-      <el-select v-model="listQuery.orderStatus" placeholder="订单状态" clearable class="filter-item" style="width: 130px"
-                 value="">
-        <el-option v-for="(val, key) in orderStatusMap" :key="key" :label="val" :value="key"/>
+      <el-select
+        v-model="listQuery.orderStatus"
+        placeholder="订单状态"
+        clearable
+        class="filter-item"
+        style="width: 130px"
+        value=""
+      >
+        <el-option v-for="(val, key) in orderStatusMap" :key="key" :label="val" :value="key" />
       </el-select>
       <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
         搜索
       </el-button>
 
-      <el-button v-waves :loading="downloadLoading" class="filter-item" type="primary" icon="el-icon-download"
-                 @click="handleDownload">
+      <el-button
+        v-waves
+        :loading="downloadLoading"
+        class="filter-item"
+        type="primary"
+        icon="el-icon-download"
+        @click="handleDownload"
+      >
         导出Excel
       </el-button>
     </div>
@@ -30,8 +47,14 @@
       style="width: 100%;"
       @sort-change="sortChange"
     >
-      <el-table-column label="ID" prop="id" sortable="custom" align="center" width="80"
-                       :class-name="getSortClass('id')">
+      <el-table-column
+        label="ID"
+        prop="id"
+        sortable="custom"
+        align="center"
+        width="80"
+        :class-name="getSortClass('id')"
+      >
         <template slot-scope="{row}">
           <span>{{ row.id }}</span>
         </template>
@@ -87,39 +110,56 @@
           <el-button v-show="row.order_status == 101" type="primary" size="mini" @click="confirmOrder(row,index)">
             确认订单
           </el-button>
-          <el-button v-if="row.status!='published'" size="mini" type="success"
-                     @click="handleModifyStatus(row,'published')">
+          <el-button
+            v-if="row.status!='published'"
+            size="mini"
+            type="success"
+            @click="handleModifyStatus(row,'published')"
+          >
             详情
           </el-button>
-          <el-button v-if="row.status!='published'" size="mini" type="success"
-                     @click="handleShip(row)">
+          <el-button
+            v-if="row.status!='published'"
+            size="mini"
+            type="success"
+            @click="handleShip(row)"
+          >
             查看物流
           </el-button>
-          <el-button v-show="row.order_status != 103 && row.order_status != 102" size="mini" type="danger"
-                     @click="handleDelete(row,$index)">
+          <el-button
+            v-show="row.order_status != 103 && row.order_status != 102"
+            size="mini"
+            type="danger"
+            @click="handleDelete(row,$index)"
+          >
             取消
           </el-button>
         </template>
       </el-table-column>
     </el-table>
 
-    <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit"
-                @pagination="getOrderPageList"/>
+    <pagination
+      v-show="total>0"
+      :total="total"
+      :page.sync="listQuery.page"
+      :limit.sync="listQuery.limit"
+      @pagination="getOrderPageList"
+    />
     <!-- 物流信息弹窗-->
     <el-dialog :visible.sync="dialogPvVisible" title="物流信息">
       <el-scrollbar style="height: 500px">
-      <el-timeline>
-        <el-timeline-item v-for="track in trackInfo.list" :key="index" :timestamp=" track.time " placement="top">
-          <el-card>
-            <h4>{{ track.status }}</h4>
-            <p>{{ track.time }}</p>
-          </el-card>
-        </el-timeline-item>
+        <el-timeline>
+          <el-timeline-item v-for="track in trackInfo.list" :key="index" :timestamp=" track.time " placement="top">
+            <el-card>
+              <h4>{{ track.status }}</h4>
+              <p>{{ track.time }}</p>
+            </el-card>
+          </el-timeline-item>
 
-      </el-timeline>
-      <span slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="dialogPvVisible = false">确认</el-button>
-      </span>
+        </el-timeline>
+        <span slot="footer" class="dialog-footer">
+          <el-button type="primary" @click="dialogPvVisible = false">确认</el-button>
+        </span>
       </el-scrollbar>
     </el-dialog>
 
@@ -131,33 +171,33 @@
 }
 </style>
 <script>
-import {getPageList, updateOrderStatus, getShipInfo} from '@/api/order'
+import { getPageList, updateOrderStatus, getShipInfo } from '@/api/order'
 import waves from '@/directive/waves' // waves directive
-import {parseTime} from '@/utils'
+import { parseTime } from '@/utils'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
-import orderLang from "@/config/lang/order"
+import orderLang from '@/config/lang/order'
 
 export default {
-  name: 'orderTodo',
-  components: {Pagination},
-  directives: {waves},
+  name: 'OrderTodo',
+  components: { Pagination },
+  directives: { waves },
   filters: {
     statusFilter(status) {
       return orderLang.ORDER_STATUS_MAP[status]
     },
-    /*是否付款*/
+    /* 是否付款*/
     payStatusFilter(time) {
       if (time) {
-        return '是';
+        return '是'
       }
-      return '否';
+      return '否'
     }
   },
   data() {
     return {
       tableKey: 0,
       list: null,
-      trackInfo: {list:null},
+      trackInfo: { list: null },
       total: 0,
       listLoading: true,
       listQuery: {
@@ -174,7 +214,7 @@ export default {
         cancel: 102
       },
       orderStatusMap: orderLang.ORDER_STATUS_MAP,
-      sortOptions: [{label: 'ID Ascending', key: '+id'}, {label: 'ID Descending', key: '-id'}],
+      sortOptions: [{ label: 'ID Ascending', key: '+id' }, { label: 'ID Descending', key: '-id' }],
       statusOptions: ['published', 'draft', 'deleted'],
       showReviewer: false,
       dialogFormVisible: false,
@@ -183,9 +223,9 @@ export default {
       dialogPvVisible: false,
       pvData: [],
       rules: {
-        type: [{required: true, message: 'type is required', trigger: 'change'}],
-        timestamp: [{type: 'date', required: true, message: 'timestamp is required', trigger: 'change'}],
-        title: [{required: true, message: 'title is required', trigger: 'blur'}]
+        type: [{ required: true, message: 'type is required', trigger: 'change' }],
+        timestamp: [{ type: 'date', required: true, message: 'timestamp is required', trigger: 'change' }],
+        title: [{ required: true, message: 'title is required', trigger: 'blur' }]
       },
       downloadLoading: false
     }
@@ -209,13 +249,13 @@ export default {
     },
     // 确认订单
     confirmOrder(row, index) {
-      let objThis = this;
+      const objThis = this
       this.$confirm('订单状态改为确认状态, 是否继续?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        updateOrderStatus({id: row.id, status: this.updateOrderStatus.confirm}).then(function (data) {
+        updateOrderStatus({ id: row.id, status: this.updateOrderStatus.confirm }).then(function(data) {
           if (data.code === 0) {
             row.order_status = objThis.updateOrderStatus.confirm
             objThis.$notify({
@@ -232,11 +272,11 @@ export default {
       })
     },
     // 查看物流
-    handleShip(row){
+    handleShip(row) {
       this.dialogPvVisible = true
-      this.trackInfo.list = null;
-      const objThis = this;
-      getShipInfo({ship_sn: row.ship_sn}).then(response => {
+      this.trackInfo.list = null
+      const objThis = this
+      getShipInfo({ ship_sn: row.ship_sn }).then(response => {
         objThis.trackInfo.list = response.data.list
       })
     },
@@ -252,7 +292,7 @@ export default {
       row.status = status
     },
     sortChange(data) {
-      const {prop, order} = data
+      const { prop, order } = data
       if (prop === 'id') {
         this.sortByID(order)
       }
@@ -268,7 +308,7 @@ export default {
 
     handleDelete(row, index) {
       const objThis = this
-      updateOrderStatus({id: row.id, status: this.updateOrderStatus.cancel}).then(function (data) {
+      updateOrderStatus({ id: row.id, status: this.updateOrderStatus.cancel }).then(function(data) {
         if (data.code === 0) {
           row.order_status = objThis.updateOrderStatus.confirm
           objThis.$notify({
@@ -304,7 +344,7 @@ export default {
         }
       }))
     },
-    getSortClass: function (key) {
+    getSortClass: function(key) {
       const sort = this.listQuery.sort
       return sort === `+${key}` ? 'ascending' : 'descending'
     }

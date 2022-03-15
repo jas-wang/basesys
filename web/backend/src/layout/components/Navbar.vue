@@ -34,7 +34,7 @@
     </div>
 
     <!-- 修改密码-->
-    <el-dialog :visible.sync="modifyPasswordDialog" :modal="false" :width="modifyPasswordDialogWidth" :close-on-click-modal="false" :closeOnPressEscape="false" title="修改密码">
+    <el-dialog :visible.sync="modifyPasswordDialog" :modal="false" :width="modifyPasswordDialogWidth" :close-on-click-modal="false" :close-on-press-escape="false" title="修改密码">
       <modify-pass :user="user" />
     </el-dialog>
 
@@ -70,8 +70,8 @@ export default {
   data() {
     return {
       modifyPasswordDialog: false,
-      modifyPasswordDialogWidth:'500px',
-      user:{
+      modifyPasswordDialogWidth: '500px',
+      user: {
       }
 
     }
@@ -84,7 +84,7 @@ export default {
       this.$store.dispatch('app/toggleSideBar')
     },
     modifyPassword() {
-     this.modifyPasswordDialog = !this.modifyPasswordDialog
+      this.modifyPasswordDialog = !this.modifyPasswordDialog
     },
     async logout() {
       await this.$store.dispatch('user/logout')

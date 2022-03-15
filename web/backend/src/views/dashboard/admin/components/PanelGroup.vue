@@ -3,13 +3,13 @@
     <el-col v-for="(item,index) in schedule" :key="index" :xs="12" :sm="12" :lg="6" class="card-panel-col">
       <div class="card-panel" @click="handleSetLineChartData(index)">
         <div class="card-panel-icon-wrapper icon-people">
-          <svg-icon :icon-class=item.icon class-name="card-panel-icon" />
+          <svg-icon :icon-class="item.icon" class-name="card-panel-icon" />
         </div>
         <div class="card-panel-description">
           <div class="card-panel-text">
             {{ item.name }}
           </div>
-          <count-to :start-val="0" :end-val=item.total :duration="2600" class="card-panel-num" />
+          <count-to :start-val="0" :end-val="item.total" :duration="2600" class="card-panel-num" />
         </div>
       </div>
     </el-col>
@@ -27,42 +27,42 @@ export default {
   data() {
     return {
       schedule: {
-        newUser:{
-          name:'新用户',
-          total:10,
-          icon:'peoples',
-          chartData:{
+        newUser: {
+          name: '新用户',
+          total: 10,
+          icon: 'peoples',
+          chartData: {
             expectedData: [100, 120, 161, 134, 105, 160, 165],
             actualData: [1, 82, 91, 154, 162, 140, 145]
           }
         },
-        order:{
-          name:'订单',
-          total:10,
-          icon:'list',
-          chartData:{
+        order: {
+          name: '订单',
+          total: 10,
+          icon: 'list',
+          chartData: {
             expectedData: [100, 120, 161, 134, 105, 160, 165],
             actualData: [2, 82, 91, 154, 162, 140, 145]
           }
         },
-        money:{
-          name:'金额',
-          total:10,
-          icon:'money',
-          chartData:{
+        money: {
+          name: '金额',
+          total: 10,
+          icon: 'money',
+          chartData: {
             expectedData: [100, 120, 161, 134, 105, 160, 165],
             actualData: [120, 82, 3, 154, 162, 140, 145]
           }
         },
-        todo:{
-          name:'待办',
-          total:10,
-          icon:'clipboard',
-          chartData:{
+        todo: {
+          name: '待办',
+          total: 10,
+          icon: 'clipboard',
+          chartData: {
             expectedData: [1100, 1210, 1611, 134, 105, 160, 165],
             actualData: [120, 82, 5, 154, 162, 140, 145]
           }
-        },
+        }
       }
     }
   },
@@ -71,12 +71,11 @@ export default {
     this.handleSetLineChartData('todo')
   },
   methods: {
-    /*获取首页统计信息*/
+    /* 获取首页统计信息*/
     getCount() {
-      let objThis = this;
-      getPageCount().then(function (data){
+      getPageCount().then(function(data) {
       //  objThis.schedule = data['data'];
-      });
+      })
     },
     handleSetLineChartData(type) {
       this.$emit('handleSetLineChartData', this.schedule[type])

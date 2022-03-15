@@ -6,7 +6,6 @@ Vue.use(Router)
 /* Layout */
 import Layout from '@/layout'
 
-
 /**
  * 路由
  */
@@ -97,8 +96,8 @@ export const asyncRoutes = [
         path: 'orderTodo',
         component: () => import('@/views/order/orderTodo'),
         name: 'orderTodo',
-        meta: {  roles: ['editor'],title: '订单管理',icon: 'edit' }
-      },
+        meta: { roles: ['editor'], title: '订单管理', icon: 'edit' }
+      }
     ]
   },
 
@@ -116,13 +115,13 @@ export const asyncRoutes = [
         path: 'goodslist',
         component: () => import('@/views/order/orderTodo'),
         name: 'orderTodo1',
-        meta: {  roles: ['editor'],title: '商品列表',icon: 'edit' }
+        meta: { roles: ['editor'], title: '商品列表', icon: 'edit' }
       },
       {
         path: 'cate',
         component: () => import('@/views/goods/cate'),
         name: 'orderDone1',
-        meta: {  roles: ['admin'],title: '分类管理',icon: 'edit' }
+        meta: { roles: ['admin'], title: '分类管理', icon: 'edit' }
       }
     ]
   },

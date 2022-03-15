@@ -19,3 +19,14 @@ export function getParentCateList(query) {
     params: query
   })
 }
+
+/*
+ * 获取单个分类信息
+ */
+export function getCate(query) {
+  return request({
+    url: '/backend/goods/getCate',
+    method: 'get',
+    params: query
+  })
+}

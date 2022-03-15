@@ -5,8 +5,13 @@
     <el-card class="box-card">
       <!--  搜索  -->
       <div class="filter-container">
-        <el-input v-model="listQuery.cateName" placeholder="分类名称" style="width: 200px;" class="filter-item"
-                  @keyup.enter.native="searchForm"/>
+        <el-input
+          v-model="listQuery.cateName"
+          placeholder="分类名称"
+          style="width: 200px;"
+          class="filter-item"
+          @keyup.enter.native="searchForm"
+        />
 
         <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" @click="searchForm">
           搜索
@@ -20,28 +25,35 @@
         <!-- 排序列区域 -->
         <template slot="rank" slot-scope="scope">
           <el-tag v-if="scope.row.level === 'L1'">一级</el-tag>
-          <el-tag type="success" v-else-if="scope.row.level === 'L2'">二级</el-tag>
-          <el-tag type="warning" v-else>三级</el-tag>
+          <el-tag v-else-if="scope.row.level === 'L2'" type="success">二级</el-tag>
+          <el-tag v-else type="warning">三级</el-tag>
         </template>
         <template slot="operation" slot-scope="scope">
-          <el-button type="primary" icon="el-icon-edit" size="mini" @click="editCate(scope.row.cat_id)">修改</el-button>
-          <el-button type="danger" icon="el-icon-delete" size="mini" @click="deleteCate(scope.row.cat_id)">删除</el-button>
+          <el-button type="primary" icon="el-icon-edit" size="mini" @click="editCate(scope.row)">修改</el-button>
+          <el-button type="danger" icon="el-icon-delete" size="mini" @click="deleteCate(scope.row.id)">删除</el-button>
           <!-- <pre>{{scope.row}}</pre> -->
         </template>
       </tree-table>
       <!-- 分页区域 -->
-      <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit"
-                  @pagination="getOrderPageList"/>
+      <pagination
+        v-show="total>0"
+        :total="total"
+        :page.sync="listQuery.page"
+        :limit.sync="listQuery.limit"
+        @pagination="getCateList"
+      />
     </el-card>
     <!-- 添加分类的对话框区域 -->
     <el-dialog
       title="添加商品分类"
       :visible.sync="addCateDialogVisible"
-      width="50%" @close="addCateDialogClose">
+      width="50%"
+      @close="addCateDialogClose"
+    >
       <!-- 添加表单区域 -->
-      <el-form :model="addCateForm" :rules="addCateFormRules" ref="addCateFormRef" label-width="150px">
-        <el-form-item label="商品类别名称：" prop="cat_name">
-          <el-input v-model="addCateForm.cat_name"></el-input>
+      <el-form ref="addCateFormRef" :model="addCateForm" :rules="addCateFormRules" label-width="150px">
+        <el-form-item label="商品类别名称：" prop="name">
+          <el-input v-model="addCateForm.name" />
         </el-form-item>
         <el-form-item label="父级分类：">
           <!-- 级别选择器区域 -->
@@ -51,9 +63,11 @@
             v-model="selectedKeys"
             :options="parentCateList"
             :props="cascaderProps"
-            expand-trigger= "hover"
-            @change="parentCateChange" clearable change-on-select>
-          </el-cascader>
+            expand-trigger="hover"
+            clearable
+            change-on-select
+            @change="parentCateChange"
+          />
         </el-form-item>
       </el-form>
       <!-- 添加底部区域 -->
@@ -62,15 +76,30 @@
         <el-button type="primary" @click="saveAddCate">确 定</el-button>
       </span>
     </el-dialog>
-    <!-- 角色编辑对话框区域 -->
+    <!-- 商品类别编辑 -->
     <el-dialog
       title="商品类别编辑"
       :visible.sync="editCateDialogVisible"
-      width="50%" @close="editCateDialogClose">
-      <!-- 修改角色表单区域 -->
-      <el-form :model="cateEditForm" :rules="cateEditFormRules" ref="cateEditFormRef" label-width="80px">
-        <el-form-item label="角色名称" prop="cat_name">
-          <el-input v-model="cateEditForm.cat_name"></el-input>
+      width="50%"
+      @close="editCateDialogClose"
+    >
+      <el-form ref="cateEditFormRef" :model="cateEditForm" :rules="cateEditFormRules" label-width="80px">
+        <el-form-item label="商品名称" prop="name">
+          <el-input v-model="cateEditForm.name" />
+        </el-form-item>
+        <el-form-item label="分类：">
+          <!-- 级别选择器区域 -->
+          <!-- options用来指定数据源 -->
+          <!-- props用来指定配置对象 -->
+          <el-cascader
+            v-model="selectedKeys"
+            :options="parentCateList"
+            :props="cascaderProps"
+            expand-trigger="hover"
+            clearable
+            change-on-select
+            @change="parentCateChange"
+          />
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
@@ -83,16 +112,18 @@
 
 <script>
 import Pagination from '@/components/Pagination'
-import {getCateList, getParentCateList} from "@/api/goods"; // secondary package based on el-pagination
+import waves from '@/directive/waves' // waves directive
+import { getCate, getCateList, getParentCateList } from '@/api/goods' // secondary package based on el-pagination
 export default {
-  components: {Pagination},
-  data () {
+  components: { Pagination },
+  directives: { waves },
+  data() {
     return {
       listLoading: true,
       listQuery: {
         page: 1,
         limit: 20,
-        cateName:'',
+        cateName: '',
         sort: '+id'
       },
       // 商品类别列表数据
@@ -133,45 +164,45 @@ export default {
       addCateDialogVisible: false,
       // 获取添加商品类表单数据
       addCateForm: {
-        cat_name: '',
+        name: '',
         // 父级分类ID
-        cat_pid: 0,
+        pid: 0,
         // 分类等级，默认添加等级为一级
-        cat_level: 0
+        level: 0
       },
       // 添加商品类别表单验证规则
       addCateFormRules: {
-        cat_name: [
+        name: [
           { required: true, message: '请输入商品类别名称', trigger: 'blur' },
-          { min: 3, max: 10, message: '长度在 3 到 10 个字符', trigger: 'blur' }
+          { min: 2, max: 10, message: '长度在 2 到 10 个字符', trigger: 'blur' }
         ]
       },
       // 获取父级分类列表的数据
       parentCateList: [],
       // 指定几杯选择器的配置对象
       cascaderProps: {
-        value: 'cat_id',
-        label: 'cat_name',
+        value: 'id',
+        label: 'name',
         children: 'children'
       },
       // 选中的父级ID数据
       selectedKeys: [],
       // 编辑获取的数据
       cateEditForm: {
-        cat_name: ''
+        name: ''
       },
       // 编辑对话框的表单验证规则
       cateEditFormRules: {
-        cat_name: [
+        name: [
           { required: true, message: '请输入商品类别名称', trigger: 'blur' },
-          { min: 3, max: 10, message: '长度在 3 到 10 个字符', trigger: 'blur' }
+          { min: 2, max: 10, message: '长度在 2 到 10 个字符', trigger: 'blur' }
         ]
       },
       // 判断编辑对话框是否打开
       editCateDialogVisible: false
     }
   },
-  created () {
+  created() {
     this.getCateList()
   },
   methods: {
@@ -189,7 +220,7 @@ export default {
       })
     },
     // 添加商品类别按钮事件
-    addCate () {
+    addCate() {
       this.getParentCateList()
       this.addCateDialogVisible = true
     },
@@ -197,27 +228,27 @@ export default {
     getParentCateList() {
       this.listLoading = true
       getParentCateList(this.listQuery).then(response => {
-        this.parentCateList = response.data.rows
+        this.parentCateList = response.data
         this.listLoading = false
       })
     },
     // 添加商品分类中选择项发生变化，触发的函数
-    parentCateChange () {
+    parentCateChange() {
       // console.log(this.selectedKeys)
       // 如果数组的length大于0,证明选中父级类别
       // 反之则，没有选择任何父级类别
       if (this.selectedKeys.length > 0) {
         // 父级分类Id
-        this.addCateForm.cat_pid = this.selectedKeys[this.selectedKeys.length - 1]
+        this.addCateForm.pid = this.selectedKeys[this.selectedKeys.length - 1]
         // 当前类别分类等级
-        this.addCateForm.cat_level = this.selectedKeys.length
+        this.addCateForm.level = this.selectedKeys.length
       } else {
-        this.addCateForm.cat_pid = 0
-        this.addCateForm.cat_level = 0
+        this.addCateForm.pid = 0
+        this.addCateForm.level = 0
       }
     },
     // 点击添加商品类别对话框里的确定按钮保存数据
-    saveAddCate () {
+    saveAddCate() {
       this.$refs.addCateFormRef.validate(async valid => {
         if (!valid) return this.$message.error('请输入正确格式！')
         const { data: res } = await this.$http.post('categories', this.addCateForm)
@@ -229,14 +260,14 @@ export default {
       })
     },
     // 关闭添加商品类别对话框重置里面的数据
-    addCateDialogClose () {
+    addCateDialogClose() {
       this.$refs.addCateFormRef.resetFields()
       this.selectedKeys = []
-      this.addCateForm.cat_level = 0
-      this.addCateForm.cat_pid = 0
+      this.addCateForm.level = 0
+      this.addCateForm.pid = 0
     },
     // 点击商品类别删除按钮
-    async deleteCate (id) {
+    async deleteCate(id) {
       const result = await this.$confirm('此操作将永久删除该类别, 是否继续?', '提示',
         {
           confirmButtonText: '确定',
@@ -255,24 +286,28 @@ export default {
       this.getCateList()
     },
     // 点击修改按钮
-    async editCate (id) {
-      // 打开编辑对话框之前需要获取角色信息显示在编辑对话框内
-      const { data: res } = await this.$http.get('categories/' + id)
-      if (res.meta.status !== 200) return this.$message.error('获取角色信息失败！')
-      this.cateEditForm = res.data
-      console.log(res.data)
-      this.editCateDialogVisible = true
+    async editCate(row) {
+      if (!this.parentCateList.length) {
+        this.getParentCateList()
+      }
+      this.cateEditForm = row
+      const objThis = this
+      this.listLoading = true
+      getCate({ id: row.id }).then(response => {
+        objThis.selectedKeys = response.data
+        objThis.editCateDialogVisible = true
+      })
     },
     // 关闭编辑按钮，数据重置
-    editCateDialogClose () {
+    editCateDialogClose() {
       this.$refs.cateEditFormRef.resetFields()
     },
     // 点击编辑按钮里的确定按钮保存数据
-    saveCateEdit () {
+    saveCateEdit() {
       this.$refs.cateEditFormRef.validate(async valid => {
         if (!valid) return this.$message.error('请按规则输入')
         const { data: res } = await this.$http.put('categories/' + this.cateEditForm.cat_id, {
-          cat_name: this.cateEditForm.cat_name
+          name: this.cateEditForm.name
         })
         if (res.meta.status !== 200) return this.$message.error('修改类别失败！')
         this.$message.success('修改类别信息成功！')

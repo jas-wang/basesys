@@ -33,7 +33,7 @@ export default {
     title: {
       type: String,
       default: '新用户'
-    },
+    }
   },
   data() {
     return {
@@ -66,7 +66,7 @@ export default {
       this.setOptions(this.chartData)
     },
     setOptions({ actualData } = {}) {
-      if(this.chart === null) {
+      if (this.chart === null) {
         return
       }
       this.chart.setOption({
@@ -100,26 +100,26 @@ export default {
           data: [this.title]
         },
         series: [
-        {
-          name: this.title,
-          smooth: true,
-          type: 'line',
-          itemStyle: {
-            normal: {
-              color: '#3888fa',
-              lineStyle: {
+          {
+            name: this.title,
+            smooth: true,
+            type: 'line',
+            itemStyle: {
+              normal: {
                 color: '#3888fa',
-                width: 2
-              },
-              areaStyle: {
-                color: '#f3f8ff'
+                lineStyle: {
+                  color: '#3888fa',
+                  width: 2
+                },
+                areaStyle: {
+                  color: '#f3f8ff'
+                }
               }
-            }
-          },
-          data: actualData,
-          animationDuration: 2800,
-          animationEasing: 'quadraticOut'
-        }]
+            },
+            data: actualData,
+            animationDuration: 2800,
+            animationEasing: 'quadraticOut'
+          }]
       })
     }
   }

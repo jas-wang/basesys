@@ -46,7 +46,7 @@ export default {
           avatar: '',
           role: '',
           nickname: '',
-          introduction:''
+          introduction: ''
         }
       }
     }

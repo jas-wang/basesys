@@ -10,11 +10,11 @@ const ORDER_STATUS_MAP = {
   202: '订单取消，退款中',
   203: '已退款',
   204: '已超时团购',
-  205: '订单已确认',
+  205: '订单已确认'
 }
 
 export default
 {
-  ORDER_STATUS_MAP,//订单状态
+  ORDER_STATUS_MAP// 订单状态
 }
 </script>

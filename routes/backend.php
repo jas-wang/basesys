@@ -30,6 +30,8 @@ Route::post('/order/getShipInfo',[\App\Http\Controllers\Backend\OrderController:
 /*商品*/
 Route::get('/goods/getCateList',[\App\Http\Controllers\Backend\GoodsController::class, 'getCateList']);
 Route::get('/goods/getParentCateList',[\App\Http\Controllers\Backend\GoodsController::class, 'getParentCateList']);
+Route::get('/goods/getCate',[\App\Http\Controllers\Backend\GoodsController::class, 'getCate']);
+
 /*首页*/
 Route::get('/main/count',[\App\Http\Controllers\Backend\MainController::class, 'count']);
 

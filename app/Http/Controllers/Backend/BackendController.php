@@ -12,8 +12,12 @@ use Illuminate\Support\Collection;
 class BackendController extends Controller
 {
 
-    protected $except = ['login','logout'];
+    protected $except = ['login', 'logout'];
     protected $auth = [];
+
+    protected $defaultPage = 1;
+    protected $defaultPageSize = 20;
+
     /**
      * Create a new AuthController instance.
      *
@@ -32,8 +36,8 @@ class BackendController extends Controller
     }
 
     /**
-     * @param  LengthAwarePaginator|array  $page
-     * @param  null|array  $list
+     * @param LengthAwarePaginator|array $page
+     * @param null|array $list
      * @return array
      */
     protected function paginate($page, $list = null)
@@ -65,16 +69,18 @@ class BackendController extends Controller
             'rows' => $page
         ];
     }
+
     /**
      * 分页信息
      * @param $page
-     * @param  null  $list
+     * @param null $list
      * @return JsonResponse
      */
     protected function successPaginate($page, $list = null)
     {
         return $this->success($this->paginate($page, $list));
     }
+
     /**
      * 成功
      * @param $data

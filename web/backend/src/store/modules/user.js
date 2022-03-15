@@ -1,4 +1,4 @@
-import {login, logout, getInfo, modifyPass, getCode} from '@/api/user'
+import { login, logout, getInfo, modifyPass, getCode } from '@/api/user'
 import { getToken, setToken, removeToken } from '@/utils/auth'
 import router, { resetRouter } from '@/router'
 
@@ -53,9 +53,9 @@ const actions = {
   },
   // user login
   modifyPass({ commit }, userInfo) {
-    const { username, password,code,phone } = userInfo
+    const { username, password, code, phone } = userInfo
     return new Promise((resolve, reject) => {
-      modifyPass({ username: username.trim(), password: password,code:code,phone:phone }).then(response => {
+      modifyPass({ username: username.trim(), password: password, code: code, phone: phone }).then(response => {
         commit('SET_TOKEN', '')
         commit('SET_ROLES', [])
         removeToken()
@@ -88,7 +88,7 @@ const actions = {
           reject('Verification failed, please Login again.')
         }
 
-        const { roles, name, avatar, introduction ,email,nickname } = data
+        const { roles, name, avatar, introduction, email, nickname } = data
 
         // roles must be a non-empty array
         if (!roles || roles.length <= 0) {

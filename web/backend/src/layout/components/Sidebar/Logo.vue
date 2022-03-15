@@ -14,7 +14,7 @@
 </template>
 
 <script>
-import commonLang from "@/config/lang/common";
+import commonLang from '@/config/lang/common'
 
 export default {
   name: 'SidebarLogo',
@@ -26,7 +26,7 @@ export default {
   },
   data() {
     return {
-      title:commonLang.SYSTEM_TITLE,
+      title: commonLang.SYSTEM_TITLE,
       logo: ''
     }
   }

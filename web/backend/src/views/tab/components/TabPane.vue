@@ -55,7 +55,6 @@
 
 <script>
 
-
 export default {
   filters: {
     statusFilter(status) {
