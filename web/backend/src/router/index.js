@@ -120,7 +120,7 @@ export const asyncRoutes = [
       },
       {
         path: 'cate',
-        component: () => import('@/views/table/complex-table'),
+        component: () => import('@/views/goods/cate'),
         name: 'orderDone1',
         meta: {  roles: ['admin'],title: '分类管理',icon: 'edit' }
       }

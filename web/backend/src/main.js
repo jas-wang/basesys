@@ -21,7 +21,8 @@ import './utils/error-log' // error log
 
 import * as filters from './filters'
 import zhLang from "element-ui/lib/locale/lang/en"; // global filters
-
+import TreeTable from 'vue-table-with-tree-grid'
+Vue.component('tree-table', TreeTable)
 /**
  * If you don't want to use mock-server
  * you want to use MockJs for mock api

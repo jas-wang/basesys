@@ -27,6 +27,9 @@ Route::get('/order/list',[\App\Http\Controllers\Backend\OrderController::class, 
 Route::post('/order/getPageList',[\App\Http\Controllers\Backend\OrderController::class, 'getPageList']);
 Route::post('/order/updateOrderStatus',[\App\Http\Controllers\Backend\OrderController::class, 'updateOrderStatus']);
 Route::post('/order/getShipInfo',[\App\Http\Controllers\Backend\OrderController::class, 'getShipInfo']);
+/*商品*/
+Route::get('/goods/getCateList',[\App\Http\Controllers\Backend\GoodsController::class, 'getCateList']);
+Route::get('/goods/getParentCateList',[\App\Http\Controllers\Backend\GoodsController::class, 'getParentCateList']);
 /*首页*/
 Route::get('/main/count',[\App\Http\Controllers\Backend\MainController::class, 'count']);
 

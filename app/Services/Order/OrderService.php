@@ -4,6 +4,7 @@ namespace App\Services\Order;
 
 
 use App\Api\ShipBi;
+use App\Models\Order\Goods;
 use App\Models\Order\Order;
 use App\Services\BaseService;
 
@@ -46,7 +47,7 @@ class OrderService extends BaseService
      * @param $status
      */
     public function updateStatus($id,$status){
-        $order = Order::query()->where('id',$id)->first();
+        $order = Goods::query()->where('id',$id)->first();
         $order->order_status = $status;
         return $order->save();
     }
